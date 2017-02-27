@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/SecureKeys.iml" filepath="$PROJECT_DIR$/SecureKeys.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SecureKeys/SecureKeys.iml" filepath="$PROJECT_DIR$/SecureKeys/SecureKeys.iml" />
-    </modules>
-  </component>
-</project>
