@@ -23,6 +23,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.1.1'
-    compile project(path:':SecureKeys')
+    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.1'
+
+    compile project(path:':core')
 }
