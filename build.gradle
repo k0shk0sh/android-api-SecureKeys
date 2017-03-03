@@ -21,3 +21,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+wrapper {
+    version = '3.3'
+    distributionType = Wrapper.DistributionType.ALL
+}

@@ -1,1 +1,1 @@
-include ':SecureKeys'
+include ':SecureKeys', ':testapp'
