@@ -1,9 +1,11 @@
 package com.u.securekeys;
 
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 
 /**
- * Bridge between native and java.
+ * Bridge between native and java for accessing secure keys.
+ *
  * Created by saguilera on 3/3/17.
  */
 public final class SecureKeys {
@@ -14,6 +16,10 @@ public final class SecureKeys {
     static {
         System.loadLibrary("native-lib");
         nativeInit(MapImpl.getMaps());
+    }
+
+    private SecureKeys() throws IllegalAccessException {
+        throw new IllegalAccessException("This object cant be instantiated");
     }
 
     public static @NonNull String getString(@NonNull String key) {
@@ -44,7 +50,9 @@ public final class SecureKeys {
         return Double.valueOf(value);
     }
 
+    @Keep
     private static native String nativeGetString(String key);
+    @Keep
     private static native void nativeInit(String[] array);
 
 }
