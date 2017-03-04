@@ -26,6 +26,7 @@ class MyClass {
   
 }
 ```
+This annotations wont be shipped with the apk, so fear not my friend :)
 Possible places for annotating are:
 - Classes
 - Constructors
