@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.u.securekeys.SecureKeys;
 import com.u.securekeys.annotation.SecureKey;
 
-@SecureKey(key = "key1", value = "zzzlue1")
+@SecureKey(key = "client-secret", value = "aD98E2GEk23TReYds9Zs9zdSdDBi23EAsdq29fXkpsDwp0W+h")
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ((TextView) findViewById(R.id.activity_main_key)).setText(SecureKeys.getString("key1"));
+        ((TextView) findViewById(R.id.activity_main_key)).setText(SecureKeys.getString("client-secret"));
     }
 
 }
