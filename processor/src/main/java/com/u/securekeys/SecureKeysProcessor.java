@@ -28,6 +28,9 @@ public class SecureKeysProcessor extends AbstractProcessor {
      */
     private static final String ENCODER_KEY = "$]å3đÛ@5mµl@";
 
+    /**
+     * Remember that the SecureKeys.java inside core references this class!
+     */
     private static final String CLASS_NAME = "ProcessedMap";
     private static final String CLASS_CLASSPATH = "com.u.securekeys";
 

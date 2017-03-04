@@ -2,6 +2,7 @@ package com.u.securekeys;
 
 import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
+import java.lang.reflect.Method;
 
 /**
  * Bridge between native and java for accessing secure keys.
@@ -13,17 +14,33 @@ public final class SecureKeys {
     private static final long NAN_LONG = -1;
     private static final String NAN_STRING = "";
 
+    private static boolean initialized;
+
     static {
         System.loadLibrary("native-lib");
-        nativeInit(MapImpl.getMaps());
+
+        try {
+            tryNativeInit();
+            initialized = true;
+        } catch (Exception e) {
+            initialized = false;
+        }
     }
 
     private SecureKeys() throws IllegalAccessException {
         throw new IllegalAccessException("This object cant be instantiated");
     }
 
+    @Keep
+    private static void tryNativeInit() throws Exception {
+        Class clazz = Class.forName("com.u.securekeys.ProcessedMap");
+        Method method = clazz.getDeclaredMethod("retrieve");
+        method.setAccessible(true);
+        nativeInit((String[]) method.invoke(null));
+    }
+
     public static @NonNull String getString(@NonNull String key) {
-        if (key.isEmpty()) {
+        if (!initialized || key.isEmpty()) {
             return NAN_STRING;
         }
 
@@ -33,7 +50,7 @@ public final class SecureKeys {
     public static long getLong(@NonNull String key) {
         String value = getString(key);
 
-        if (value.isEmpty()) {
+        if (!initialized || value.isEmpty()) {
             return NAN_LONG;
         }
 
@@ -43,7 +60,7 @@ public final class SecureKeys {
     public static double getDouble(@NonNull String key) {
         String value = getString(key);
 
-        if (value.isEmpty()) {
+        if (!initialized || value.isEmpty()) {
             return NAN_LONG;
         }
 
