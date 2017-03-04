@@ -2,6 +2,9 @@
 #include <string>
 #include <map>
 
+#define _separator ";;;;"
+#define _default_response ""
+
 std::map<std::string , std::string> mapVals;
 
 static const std::string available_chars =
@@ -77,19 +80,16 @@ JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit
 
     for (int i = 0; i < stringCount; i++) {
         jstring string = (jstring) (env->GetObjectArrayElement(array, i));
-        const jchar *rawChar = env->GetStringChars(string, 0);
-        int size = env->GetStringLength(string);
+        const char *rawString = env->GetStringUTFChars(string, 0);
 
-        std::string keyval;
-
-        for (int j = 0 ; j < size ; j++) {
-            keyval += *(rawChar);
-            ++rawChar;
-        }
-
-        unsigned long separator = keyval.find(";;;;");
+        std::string keyval(rawString);
+        unsigned long separator = keyval.find(_separator);
         if (separator != std::string::npos) {
             mapVals[keyval.substr(0, separator)] = keyval.substr(separator + 4);
+        }
+
+        if (string != NULL) {
+            (env)->ReleaseStringUTFChars(string, rawString);
         }
     }
 }
@@ -107,5 +107,5 @@ JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString
 
     env->ReleaseStringUTFChars(key, rawString);
 
-    return (env)->NewStringUTF("");
+    return (env)->NewStringUTF(_default_response);
 }
