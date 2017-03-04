@@ -3,7 +3,7 @@ package com.u.testapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
-import com.u.securekeys.R;
+import com.u.testapp.R;
 import com.u.securekeys.SecureKeys;
 import com.u.securekeys.annotation.SecureKey;
 

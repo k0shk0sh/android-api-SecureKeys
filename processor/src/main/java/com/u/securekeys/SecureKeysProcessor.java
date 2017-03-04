@@ -51,11 +51,11 @@ public class SecureKeysProcessor extends AbstractProcessor {
         for (Element element : annotatedElements) {
             SecureKey annotation = element.getAnnotation(SecureKey.class);
 
-            char[] key = encoder.encode(annotation.key());
-            char[] value = encoder.encode(annotation.value());
+            String key = encoder.encode(annotation.key());
+            String value = encoder.encode(annotation.value());
 
-            retrieveMethodBuilder.addStatement("array[" + counter + "] = " + Arrays.toString(key) + " + \";;;;\" + " +
-                Arrays.toString(value));
+            retrieveMethodBuilder.addStatement("array[" + counter + "] = \"" + key + "\" + \";;;;\" + \"" +
+                value + "\"");
 
             ++counter;
         }
@@ -63,7 +63,7 @@ public class SecureKeysProcessor extends AbstractProcessor {
         retrieveMethodBuilder.addStatement("return array");
 
         TypeSpec createdClass = TypeSpec.classBuilder(CLASS_NAME)
-            .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+            .addModifiers(Modifier.FINAL)
             .addMethod(retrieveMethodBuilder.build())
             .build();
 

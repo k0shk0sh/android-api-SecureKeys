@@ -27,7 +27,7 @@ public class Encoder {
      *
      * @return encoded string
      */
-    public char[] encode(String value) {
+    public String encode(String value) {
         String encoded64 = DatatypeConverter.printBase64Binary(value.getBytes());
 
         char encoded[] = encoded64.toCharArray();
@@ -35,7 +35,7 @@ public class Encoder {
             encoded[i] ^= key.charAt(i % key.length());
         }
 
-        return encoded;
+        return new String(encoded);
     }
 
 }
