@@ -2,7 +2,7 @@
 
 ### Description
 
-Tiny lib to store constants where attackers will have a harder time to find.
+Tiny lib (Less than 10 methods) to store constants where attackers will have a harder time to find.
 
 This library uses an annotationProcessor to store the constants in a new file (where the constants are crypted), and via JNI it will later retrieve them decoding them inside the `.o` file.
 
@@ -18,7 +18,7 @@ The annotations used for the processor are removed in compile time, so they wont
 
 Annotate secure stuff wherever you like as:
 ```Java
-@SecureKeys(key = "client_secret", value = "a8DB4DEwWyPK880LmmWd39...")
+@SecureKeys(key = "client_secret", value = "my_client_secret...")
 class MyClass {
   
   @SecureKeys(key = "or_here", value = "00112233")
@@ -38,6 +38,10 @@ SecureKeys.getString("client_secret");
 SecureKeys.getLong("crash_tracking_system_user_id");
 SecureKeys.getDouble("time_for_destroying_the_world");
 ```
+
+### Proguard
+
+Currently the library supports transitively Proguard, so just by adding the aar you should be safe :)
 
 ### Known improvements
 - Change the encrypt/decrypt system, currently its base64, but we could start using aes or some more sophisticated crypto.

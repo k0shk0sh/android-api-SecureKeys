@@ -94,20 +94,6 @@ JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit
     }
 }
 
-// TODO. This method shouldnt go to production.
-std::string toString() {
-    std::string toString = "Map: \n";
-    for(std::pair<std::string, std::string> const &pair : mapVals) {
-        toString += "- " + decode(pair.first) + " : " + decode(pair.second) + ".\n";
-    }
-    toString += "\nNon Decoded Map: \n";
-    for(std::pair<std::string, std::string> const &pair : mapVals) {
-        toString += "- " + (pair.first) + " : " + (pair.second) + ".\n";
-    }
-
-    return toString;
-}
-
 JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString
         (JNIEnv *env, jclass instance, jstring key) {
     const char *rawString = env->GetStringUTFChars(key, 0);
