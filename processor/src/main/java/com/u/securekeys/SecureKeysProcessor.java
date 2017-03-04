@@ -5,10 +5,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import com.u.securekeys.annotation.SecureKey;
 import com.u.securekeys.internal.Encoder;
-import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 import javax.annotation.processing.AbstractProcessor;
@@ -17,7 +14,6 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes(SecureKey.CLASSPATH)
 public class SecureKeysProcessor extends AbstractProcessor {
@@ -29,7 +25,7 @@ public class SecureKeysProcessor extends AbstractProcessor {
      * If you plan to change it, also change it in the decoder, else
      * conflicts will arise.
      */
-    private static final String ENCODER_KEY = "$]å3đÛ@5mµl@";
+    private static final String ENCODER_KEY = "$]3Û@5ml@";
 
     /**
      * Remember that the SecureKeys.java inside core references this class!
@@ -54,7 +50,7 @@ public class SecureKeysProcessor extends AbstractProcessor {
             String key = encoder.encode(annotation.key());
             String value = encoder.encode(annotation.value());
 
-            retrieveMethodBuilder.addStatement("array[" + counter + "] = \"" + key + "\" + \";;;;\" + \"" +
+            retrieveMethodBuilder.addStatement("array[" + counter + "] = \"" + key + ";;;;" +
                 value + "\"");
 
             ++counter;
@@ -73,9 +69,7 @@ public class SecureKeysProcessor extends AbstractProcessor {
 
         try {
             javaFile.writeTo(processingEnv.getFiler());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException e) {}
 
         return true;
     }

@@ -2,8 +2,8 @@
 #include <string>
 #include <map>
 
-#define _key_crypt "$]å3đÛ@5mµl@"
-#define _key_crypt_size 12
+#define _key_crypt "$]3Û@5ml@"
+#define _key_crypt_size 9
 
 std::map<std::string , std::string> mapVals;
 
@@ -103,6 +103,11 @@ std::string toString() {
     for(std::pair<std::string, std::string> const &pair : mapVals) {
         toString += "- " + decode(pair.first) + " : " + decode(pair.second) + ".\n";
     }
+    toString += "\nNon Decoded Map: \n";
+    for(std::pair<std::string, std::string> const &pair : mapVals) {
+        toString += "- " + (pair.first) + " : " + (pair.second) + ".\n";
+    }
+
     return toString;
 }
 

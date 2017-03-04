@@ -28,14 +28,18 @@ public class Encoder {
      * @return encoded string
      */
     public String encode(String value) {
-        String encoded64 = DatatypeConverter.printBase64Binary(value.getBytes());
+        try {
+            String encoded64 = DatatypeConverter.printBase64Binary(value.getBytes("UTF-8"));
 
-        char encoded[] = encoded64.toCharArray();
-        for (int i = 0 ; i < encoded.length ; i++) {
-            encoded[i] ^= key.charAt(i % key.length());
+            char encoded[] = encoded64.toCharArray();
+            for (int i = 0; i < encoded.length; i++) {
+                encoded[i] ^= key.charAt(i % key.length());
+            }
+
+            return new String(encoded);
+        } catch (Exception e) {
+            return "";
         }
-
-        return new String(encoded);
     }
 
 }
