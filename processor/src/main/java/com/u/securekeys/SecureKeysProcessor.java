@@ -5,7 +5,9 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 import com.u.securekeys.annotation.SecureKey;
 import com.u.securekeys.internal.Encoder;
+import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
@@ -15,6 +17,7 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
+import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes(SecureKey.CLASSPATH)
 public class SecureKeysProcessor extends AbstractProcessor {
@@ -39,10 +42,9 @@ public class SecureKeysProcessor extends AbstractProcessor {
         Collection<? extends Element> annotatedElements = roundEnvironment.getElementsAnnotatedWith(SecureKey.class);
 
         MethodSpec.Builder retrieveMethodBuilder = MethodSpec.methodBuilder("retrieve")
-            .addComment("Method that retrieves the mapping of the values")
             .addModifiers(Modifier.FINAL, Modifier.PUBLIC, Modifier.STATIC)
             .returns(String[].class)
-            .addStatement("String[] array = new String[$S]", annotatedElements.size());
+            .addStatement("String array[] = new String[" + annotatedElements.size() + "]");
 
         int counter = 0;
         Encoder encoder = new Encoder(ENCODER_KEY);
@@ -66,12 +68,12 @@ public class SecureKeysProcessor extends AbstractProcessor {
             .build();
 
         JavaFile javaFile = JavaFile.builder(CLASS_CLASSPATH, createdClass)
+            .addFileComment("Method that retrieves the mapping of the values")
             .build();
 
         try {
-            javaFile.writeTo(System.out);
+            javaFile.writeTo(processingEnv.getFiler());
         } catch (IOException e) {
-            System.out.println("SECURE_KEYS_PROCESSOR: Couldnt create processed file!");
             e.printStackTrace();
         }
 

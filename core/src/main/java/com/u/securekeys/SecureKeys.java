@@ -31,6 +31,7 @@ public final class SecureKeys {
         throw new IllegalAccessException("This object cant be instantiated");
     }
 
+    @SuppressWarnings("unchecked")
     @Keep
     private static void tryNativeInit() throws Exception {
         Class clazz = Class.forName("com.u.securekeys.ProcessedMap");

@@ -1,6 +1,6 @@
 package com.u.securekeys.internal;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  * Class to encode strings with a given key
@@ -28,7 +28,7 @@ public class Encoder {
      * @return encoded string
      */
     public char[] encode(String value) {
-        String encoded64 = Base64.encode(value.getBytes());
+        String encoded64 = DatatypeConverter.printBase64Binary(value.getBytes());
 
         char encoded[] = encoded64.toCharArray();
         for (int i = 0 ; i < encoded.length ; i++) {
