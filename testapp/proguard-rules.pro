@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# So we can test the libs and not the testapp
+-keep class com.u.testapp.** { *; }

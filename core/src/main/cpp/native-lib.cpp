@@ -121,5 +121,5 @@ JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString
 
     env->ReleaseStringUTFChars(key, rawString);
 
-    return (env)->NewStringUTF(toString().c_str());
+    return (env)->NewStringUTF("");
 }

@@ -14,4 +14,30 @@ The annotations used for the processor are removed in compile time, so they wont
 
 ### Usage
 
-WIP.
+**I havent uploaded yet to bintray, so currently theres no way :poop:** -> Soon will be :)
+
+Annotate secure stuff wherever you like as:
+```Java
+@SecureKeys(key = "client_secret", value = "a8DB4DEwWyPK880LmmWd39...")
+class MyClass {
+  
+  @SecureKeys(key = "or_here", value = "00112233")
+  public void myMethod() {}
+  
+}
+```
+Possible places for annotating are:
+- Classes
+- Constructors
+- Fields
+- Methods
+
+Thats all. Whenever you plan on using them simply call:
+```Java
+SecureKeys.getString("client_secret");
+SecureKeys.getLong("crash_tracking_system_user_id");
+SecureKeys.getDouble("time_for_destroying_the_world");
+```
+
+### Known improvements
+- Change the encrypt/decrypt system, currently its base64, but we could start using aes or some more sophisticated crypto.
