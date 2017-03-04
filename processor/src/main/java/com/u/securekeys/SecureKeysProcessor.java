@@ -19,15 +19,6 @@ import javax.lang.model.element.TypeElement;
 public class SecureKeysProcessor extends AbstractProcessor {
 
     /**
-     * Remember this key is also in the decoder inside
-     * core::main/cpp/native-lib.cpp !
-     *
-     * If you plan to change it, also change it in the decoder, else
-     * conflicts will arise.
-     */
-    private static final String ENCODER_KEY = "$]3Û@5ml@";
-
-    /**
      * Remember that the SecureKeys.java inside core references this class!
      */
     private static final String CLASS_NAME = "ProcessedMap";
@@ -43,7 +34,7 @@ public class SecureKeysProcessor extends AbstractProcessor {
             .addStatement("String array[] = new String[" + annotatedElements.size() + "]");
 
         int counter = 0;
-        Encoder encoder = new Encoder(ENCODER_KEY);
+        Encoder encoder = new Encoder();
         for (Element element : annotatedElements) {
             SecureKey annotation = element.getAnnotation(SecureKey.class);
 

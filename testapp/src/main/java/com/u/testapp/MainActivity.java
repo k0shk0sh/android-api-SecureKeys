@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.u.securekeys.SecureKeys;
 import com.u.securekeys.annotation.SecureKey;
 
-@SecureKey(key = "key1", value = "value1")
+@SecureKey(key = "key1", value = "zzzlue1")
 public class MainActivity extends AppCompatActivity {
 
     @Override

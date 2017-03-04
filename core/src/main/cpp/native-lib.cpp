@@ -2,9 +2,6 @@
 #include <string>
 #include <map>
 
-#define _key_crypt "$]3Û@5ml@"
-#define _key_crypt_size 9
-
 std::map<std::string , std::string> mapVals;
 
 static const std::string available_chars =
@@ -18,9 +15,6 @@ static inline bool is_decodable(unsigned char c) {
 }
 
 std::string decode(std::string encoded_string) {
-    for (size_t i = 0; i < encoded_string.size(); i++)
-        encoded_string[i] ^= _key_crypt[i % _key_crypt_size];
-
     int in_len = encoded_string.size();
     int i = 0;
     int j = 0;
@@ -83,16 +77,19 @@ JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit
 
     for (int i = 0; i < stringCount; i++) {
         jstring string = (jstring) (env->GetObjectArrayElement(array, i));
-        const char *rawString = env->GetStringUTFChars(string, 0);
+        const jchar *rawChar = env->GetStringChars(string, 0);
+        int size = env->GetStringLength(string);
 
-        std::string keyval(rawString);
+        std::string keyval;
+
+        for (int j = 0 ; j < size ; j++) {
+            keyval += *(rawChar);
+            ++rawChar;
+        }
+
         unsigned long separator = keyval.find(";;;;");
         if (separator != std::string::npos) {
             mapVals[keyval.substr(0, separator)] = keyval.substr(separator + 4);
-        }
-
-        if (string != NULL) {
-            (env)->ReleaseStringUTFChars(string, rawString);
         }
     }
 }
@@ -124,5 +121,5 @@ JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString
 
     env->ReleaseStringUTFChars(key, rawString);
 
-    return (env)->NewStringUTF("");
+    return (env)->NewStringUTF(toString().c_str());
 }
