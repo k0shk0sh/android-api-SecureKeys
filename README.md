@@ -18,10 +18,10 @@ The annotations used for the processor are removed in compile time, so they wont
 
 Annotate secure stuff wherever you like as:
 ```Java
-@SecureKeys(key = "client_secret", value = "my_client_secret...")
+@SecureKey(key = "client_secret", value = "my_client_secret...")
 class MyClass {
   
-  @SecureKeys(key = "or_here", value = "00112233")
+  @SecureKey(key = "or_here", value = "00112233")
   public void myMethod() {}
   
 }
