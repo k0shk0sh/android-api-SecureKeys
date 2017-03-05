@@ -34,16 +34,48 @@ Possible places for annotating are:
 - Fields
 - Methods
 
-Thats all. Whenever you plan on using them simply call:
+Thats all. Whenever you plan on using them simply call one of:
 ```Java
 SecureKeys.getString("client_secret");
 SecureKeys.getLong("crash_tracking_system_user_id");
 SecureKeys.getDouble("time_for_destroying_the_world");
 ```
 
+### Code generation
+
+Generated code for this 2 annotations:
+```Java
+@SecureKey(key = "client-secret", value = "aD98E2GEk23TReYds9Zs9zdSdDBi23EAsdq29fXkpsDwp0W+h")
+@SecureKey(key = "key22", value = "value2")
+```
+Will look like this:
+```Java
+   ...
+   L1
+    LINENUMBER 9 L1
+    ALOAD 0
+    ICONST_0
+    // This string is "client-secret"
+    LDC "c+Ciy4ZAfaCkSK3aBgVCDg==;;;;jUvAlWYtbJJXOB5PWy1NMsgtAjOcBYdZpSgWcvBjnfwXtmyCsMFnPHeM4CrLdYPO2xmk2IAnOGhlsVn55eV6wA=="
+    AASTORE
+   L2
+    LINENUMBER 10 L2
+    ALOAD 0
+    ICONST_1
+    // This string is "key22"
+    LDC "zNgp44YJZLppymmiBdEL8A==;;;;Hk6WGAWtAPtVZYENYVUhkg=="
+    AASTORE
+   L3
+   ...
+```
+
 ### Proguard
 
 Currently the library supports transitively Proguard, so just by adding the aar you should be safe :)
 
-### Known improvements
-- Change the encrypt/decrypt system, currently its base64, but we could start using aes or some more sophisticated crypto.
+### Missing features:
+- [x] Change the encrypt/decrypt system, currently its base64, but we could start using aes or some more sophisticated crypto.
+- [ ] Let the consumer set their own AES key (this is tricky, key shouldnt be exposed to APK but should be visible for apt AND JNI)
+- [ ] Do tests
+- [ ] Set a CI for the repository
+- [ ] Post benchmarks
