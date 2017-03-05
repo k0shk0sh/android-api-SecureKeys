@@ -3,6 +3,7 @@
 #include <map>
 #include <algorithm>
 #include <locale>
+#include <sstream>
 #include "aes.h"
 
 #define _separator ";;;;"
@@ -28,18 +29,18 @@ static inline bool is_decodable(unsigned char c) {
     return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-static inline std::string &left_trim(std::string &str) {
-    str.erase(str.begin(), std::find_if(str.begin(), str.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-    return str;
-}
-
-static inline std::string &right_trime(std::string &str) {
+static inline std::string &remove_padding(std::string &str) {
+    // Trim spaces
     str.erase(std::find_if(str.rbegin(), str.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), str.end());
-    return str;
-}
 
-static inline std::string &trim(std::string &str) {
-    return left_trim(right_trime(str));
+    // Remove internal directives (ASCII ints from 0 to 31)
+    auto iterator = std::find_if(str.rbegin(), str.rend(), [] (char key) {
+        return key > 31;
+    });
+
+    str.erase(iterator.base(), str.end());
+
+    return str;
 }
 
 std::string decode(JNIEnv *env, std::string encoded_string) {
@@ -116,7 +117,7 @@ std::string decode(JNIEnv *env, std::string encoded_string) {
     free(input);
     free(buff);
 
-    return trim(result);
+    return remove_padding(result);
 }
 
 extern "C" {
@@ -159,7 +160,7 @@ JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit
 std::string toString(JNIEnv *env) {
     std::string toString = "Map: \n";
     for(std::pair<std::string, std::string> const &pair : mapVals) {
-        toString += "- " + decode(env,pair.first) + " : " + decode(env, pair.second) + ".\n";
+        toString += "- " + decode(env, pair.first) + " : " + decode(env, pair.second) + ".\n";
     }
     toString += "\nNon Decoded Map: \n";
     for(std::pair<std::string, std::string> const &pair : mapVals) {
