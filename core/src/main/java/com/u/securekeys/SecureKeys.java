@@ -17,7 +17,7 @@ public final class SecureKeys {
     private static boolean initialized;
 
     static {
-        System.loadLibrary("native-lib");
+        System.loadLibrary("secure-keys");
 
         try {
             tryNativeInit();
