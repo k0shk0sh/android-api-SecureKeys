@@ -12,10 +12,11 @@ import javax.xml.bind.DatatypeConverter;
  */
 public class Encoder {
 
+    // Initial vector for AES cipher
     private static final byte initialVectorBytes[] = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04,
         0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
 
-    // Key used for encoding
+    // Key used for AES cypher
     private static final byte keyBytes[] = new byte[] { 0x60, 0x3d, (byte) 0xeb,
         0x10, 0x15, (byte) 0xca, 0x71, (byte) 0xbe, 0x2b, 0x73,
         (byte) 0xae, (byte) 0xf0, (byte) 0x85, 0x7d, 0x77, (byte) 0x81,
@@ -29,7 +30,8 @@ public class Encoder {
         try {
             return DatatypeConverter.printBase64Binary(aes(value.getBytes()));
         } catch (Exception e) {
-            return "";
+            e.printStackTrace();
+            throw new RuntimeException("Couldnt encode value: " + value, e);
         }
     }
 
@@ -45,12 +47,12 @@ public class Encoder {
         } catch (InvalidKeyException e) {
             System.out.println("Please install JCE's Unlimited Strength Policies for next compilation");
             if (Restrictions.remove())
-                aes(content);
+                return aes(content);
+            else throw new RuntimeException("No JCE's policies installed + couldnt bypass them", e);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new RuntimeException("Unknown exception while trying to encript with aes", e);
         }
-
-        return null;
     }
 
 }

@@ -63,7 +63,7 @@ public class SecureKeysProcessor extends AbstractProcessor {
 
         try {
             javaFile.writeTo(processingEnv.getFiler());
-        } catch (IOException e) {}
+        } catch (IOException e) { /* Silent. */ }
 
         return true;
     }
