@@ -13,14 +13,16 @@
                * http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf .
               The CCM mode of operation is specified by NIST SP80-38 C, available at:
                * http://csrc.nist.gov/publications/nistpubs/800-38C/SP800-38C_updated-July20_2007.pdf
+               *
+*
+* Edited by: Santiago Aguilera
+* Changes: Refactors | New CBC method | New padding method
 *********************************************************************/
 
 /*************************** HEADER FILES ***************************/
 #include <stdlib.h>
-#include <memory.h>
+#include <algorithm>
 #include "aes.h"
-
-#include <stdio.h>
 
 /****************************** MACROS ******************************/
 // The least significant byte of the word is rotated to the end.
@@ -220,8 +222,7 @@ static const BYTE gf_mul[256][6] = {
 
 /*********************** FUNCTION DEFINITIONS ***********************/
 // XORs the in and out buffers, storing the result in out. Length is in bytes.
-void xor_buf(const BYTE in[], BYTE out[], size_t len)
-{
+void xor_buf(const BYTE in[], BYTE out[], size_t len) {
     size_t idx;
 
     for (idx = 0; idx < len; idx++)
@@ -231,8 +232,7 @@ void xor_buf(const BYTE in[], BYTE out[], size_t len)
 /*******************
 * AES - CBC
 *******************/
-int aes_encrypt_cbc(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[])
-{
+int aes_encrypt_cbc(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[]) {
     BYTE buf_in[AES_BLOCK_SIZE], buf_out[AES_BLOCK_SIZE], iv_buf[AES_BLOCK_SIZE];
     int blocks, idx;
 
@@ -254,8 +254,7 @@ int aes_encrypt_cbc(const BYTE in[], size_t in_len, BYTE out[], const WORD key[]
     return(TRUE);
 }
 
-int aes_encrypt_cbc_mac(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[])
-{
+int aes_encrypt_cbc_mac(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[]) {
     BYTE buf_in[AES_BLOCK_SIZE], buf_out[AES_BLOCK_SIZE], iv_buf[AES_BLOCK_SIZE];
     int blocks, idx;
 
@@ -279,8 +278,7 @@ int aes_encrypt_cbc_mac(const BYTE in[], size_t in_len, BYTE out[], const WORD k
     return(TRUE);
 }
 
-int aes_decrypt_cbc(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[])
-{
+int aes_decrypt_cbc(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[]) {
     BYTE buf_in[AES_BLOCK_SIZE], buf_out[AES_BLOCK_SIZE], iv_buf[AES_BLOCK_SIZE];
     int blocks, idx;
 
@@ -305,8 +303,7 @@ int aes_decrypt_cbc(const BYTE in[], size_t in_len, BYTE out[], const WORD key[]
 /*******************
 * AES - CTR
 *******************/
-void increment_iv(BYTE iv[], int counter_size)
-{
+void increment_iv(BYTE iv[], int counter_size) {
     int idx;
 
     // Use counter_size bytes at the end of the IV as the big-endian integer to increment.
@@ -319,8 +316,7 @@ void increment_iv(BYTE iv[], int counter_size)
 
 // Performs the encryption in-place, the input and output buffers may be the same.
 // Input may be an arbitrary length (in bytes).
-void aes_encrypt_ctr(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[])
-{
+void aes_encrypt_ctr(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[]) {
     size_t idx = 0, last_block_length;
     BYTE iv_buf[AES_BLOCK_SIZE], out_buf[AES_BLOCK_SIZE];
 
@@ -342,8 +338,7 @@ void aes_encrypt_ctr(const BYTE in[], size_t in_len, BYTE out[], const WORD key[
     xor_buf(out_buf, &out[idx], in_len - idx);   // Use the Most Significant bytes.
 }
 
-void aes_decrypt_ctr(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[])
-{
+void aes_decrypt_ctr(const BYTE in[], size_t in_len, BYTE out[], const WORD key[], int keysize, const BYTE iv[]) {
     // CTR encryption is its own inverse function.
     aes_encrypt_ctr(in, in_len, out, key, keysize, iv);
 }
@@ -354,8 +349,7 @@ void aes_decrypt_ctr(const BYTE in[], size_t in_len, BYTE out[], const WORD key[
 // out_len = payload_len + assoc_len
 int aes_encrypt_ccm(const BYTE payload[], WORD payload_len, const BYTE assoc[], unsigned short assoc_len,
                     const BYTE nonce[], unsigned short nonce_len, BYTE out[], WORD *out_len,
-                    WORD mac_len, const BYTE key_str[], int keysize)
-{
+                    WORD mac_len, const BYTE key_str[], int keysize) {
     BYTE temp_iv[AES_BLOCK_SIZE], counter[AES_BLOCK_SIZE], mac[16], *buf;
     int end_of_buf, payload_len_store_size;
     WORD key[60];
@@ -417,8 +411,7 @@ int aes_encrypt_ccm(const BYTE payload[], WORD payload_len, const BYTE assoc[], 
 // Needs a flag for whether the MAC matches.
 int aes_decrypt_ccm(const BYTE ciphertext[], WORD ciphertext_len, const BYTE assoc[], unsigned short assoc_len,
                     const BYTE nonce[], unsigned short nonce_len, BYTE plaintext[], WORD *plaintext_len,
-                    WORD mac_len, int *mac_auth, const BYTE key_str[], int keysize)
-{
+                    WORD mac_len, int *mac_auth, const BYTE key_str[], int keysize) {
     BYTE temp_iv[AES_BLOCK_SIZE], counter[AES_BLOCK_SIZE], mac[16], mac_buf[16], *buf;
     int end_of_buf, plaintext_len_store_size;
     WORD key[60];
@@ -483,15 +476,13 @@ int aes_decrypt_ccm(const BYTE ciphertext[], WORD ciphertext_len, const BYTE ass
 }
 
 // Creates the first counter block. First byte is flags, then the nonce, then the incremented part.
-void ccm_prepare_first_ctr_blk(BYTE counter[], const BYTE nonce[], int nonce_len, int payload_len_store_size)
-{
+void ccm_prepare_first_ctr_blk(BYTE counter[], const BYTE nonce[], int nonce_len, int payload_len_store_size) {
     memset(counter, 0, AES_BLOCK_SIZE);
     counter[0] = (payload_len_store_size - 1) & 0x07;
     memcpy(&counter[1], nonce, nonce_len);
 }
 
-void ccm_prepare_first_format_blk(BYTE buf[], int assoc_len, int payload_len, int payload_len_store_size, int mac_len, const BYTE nonce[], int nonce_len)
-{
+void ccm_prepare_first_format_blk(BYTE buf[], int assoc_len, int payload_len, int payload_len_store_size, int mac_len, const BYTE nonce[], int nonce_len) {
     // Set the flags for the first byte of the first block.
     buf[0] = ((((mac_len - 2) / 2) & 0x07) << 3) | ((payload_len_store_size - 1) & 0x07);
     if (assoc_len > 0)
@@ -503,8 +494,7 @@ void ccm_prepare_first_format_blk(BYTE buf[], int assoc_len, int payload_len, in
     buf[14] = (payload_len >> 8) & 0x000000FF;
 }
 
-void ccm_format_assoc_data(BYTE buf[], int *end_of_buf, const BYTE assoc[], int assoc_len)
-{
+void ccm_format_assoc_data(BYTE buf[], int *end_of_buf, const BYTE assoc[], int assoc_len) {
     int pad;
 
     buf[*end_of_buf + 1] = assoc_len & 0x00FF;
@@ -517,8 +507,7 @@ void ccm_format_assoc_data(BYTE buf[], int *end_of_buf, const BYTE assoc[], int 
     *end_of_buf += pad;
 }
 
-void ccm_format_payload_data(BYTE buf[], int *end_of_buf, const BYTE payload[], int payload_len)
-{
+void ccm_format_payload_data(BYTE buf[], int *end_of_buf, const BYTE payload[], int payload_len) {
     int pad;
 
     memcpy(&buf[*end_of_buf], payload, payload_len);
@@ -538,8 +527,7 @@ void ccm_format_payload_data(BYTE buf[], int *end_of_buf, const BYTE payload[], 
 /////////////////
 
 // Substitutes a word using the AES S-Box.
-WORD SubWord(WORD word)
-{
+WORD SubWord(WORD word) {
     unsigned int result;
 
     result = (int)aes_sbox[(word >> 4) & 0x0000000F][word & 0x0000000F];
@@ -552,8 +540,7 @@ WORD SubWord(WORD word)
 // Performs the action of generating the keys that will be used in every round of
 // encryption. "key" is the user-supplied input key, "w" is the output key schedule,
 // "keysize" is the length in bits of "key", must be 128, 192, or 256.
-void aes_key_setup(const BYTE key[], WORD w[], int keysize)
-{
+void aes_key_setup(const BYTE key[], WORD w[], int keysize) {
     int Nb=4,Nr,Nk,idx;
     WORD temp,Rcon[]={0x01000000,0x02000000,0x04000000,0x08000000,0x10000000,0x20000000,
                       0x40000000,0x80000000,0x1b000000,0x36000000,0x6c000000,0xd8000000,
@@ -589,8 +576,7 @@ void aes_key_setup(const BYTE key[], WORD w[], int keysize)
 // form of 4 integers (the "w" array). Each integer is XOR'd by one column of the state.
 // Also performs the job of InvAddRoundKey(); since the function is a simple XOR process,
 // it is its own inverse.
-void AddRoundKey(BYTE state[][4], const WORD w[])
-{
+void AddRoundKey(BYTE state[][4], const WORD w[]) {
     BYTE subkey[4];
 
     // memcpy(subkey,&w[idx],4); // Not accurate for big endian machines
@@ -638,8 +624,7 @@ void AddRoundKey(BYTE state[][4], const WORD w[])
 
 // Performs the SubBytes step. All bytes in the state are substituted with a
 // pre-calculated value from a lookup table.
-void SubBytes(BYTE state[][4])
-{
+void SubBytes(BYTE state[][4]) {
     state[0][0] = aes_sbox[state[0][0] >> 4][state[0][0] & 0x0F];
     state[0][1] = aes_sbox[state[0][1] >> 4][state[0][1] & 0x0F];
     state[0][2] = aes_sbox[state[0][2] >> 4][state[0][2] & 0x0F];
@@ -658,8 +643,7 @@ void SubBytes(BYTE state[][4])
     state[3][3] = aes_sbox[state[3][3] >> 4][state[3][3] & 0x0F];
 }
 
-void InvSubBytes(BYTE state[][4])
-{
+void InvSubBytes(BYTE state[][4]) {
     state[0][0] = aes_invsbox[state[0][0] >> 4][state[0][0] & 0x0F];
     state[0][1] = aes_invsbox[state[0][1] >> 4][state[0][1] & 0x0F];
     state[0][2] = aes_invsbox[state[0][2] >> 4][state[0][2] & 0x0F];
@@ -683,8 +667,7 @@ void InvSubBytes(BYTE state[][4])
 /////////////////
 
 // Performs the ShiftRows step. All rows are shifted cylindrically to the left.
-void ShiftRows(BYTE state[][4])
-{
+void ShiftRows(BYTE state[][4]) {
     int t;
 
     // Shift left by 1
@@ -709,8 +692,7 @@ void ShiftRows(BYTE state[][4])
 }
 
 // All rows are shifted cylindrically to the right.
-void InvShiftRows(BYTE state[][4])
-{
+void InvShiftRows(BYTE state[][4]) {
     int t;
 
     // Shift right by 1
@@ -742,8 +724,7 @@ void InvShiftRows(BYTE state[][4])
 // multiplication in a Galios Field 2^8. All multiplication is pre-computed in a table.
 // Addition is equivilent to XOR. (Must always make a copy of the column as the original
 // values will be destoyed.)
-void MixColumns(BYTE state[][4])
-{
+void MixColumns(BYTE state[][4]) {
     BYTE col[4];
 
     // Column 1
@@ -832,8 +813,7 @@ void MixColumns(BYTE state[][4])
     state[3][3] ^= gf_mul[col[3]][0];
 }
 
-void InvMixColumns(BYTE state[][4])
-{
+void InvMixColumns(BYTE state[][4]) {
     BYTE col[4];
 
     // Column 1
@@ -926,8 +906,7 @@ void InvMixColumns(BYTE state[][4])
 // (En/De)Crypt
 /////////////////
 
-void aes_encrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
-{
+void aes_encrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize) {
     BYTE state[4][4];
 
     // Copy input array (should be 16 bytes long) to a matrix (sequential bytes are ordered
@@ -999,8 +978,7 @@ void aes_encrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
     out[15] = state[3][3];
 }
 
-void aes_decrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
-{
+void aes_decrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize) {
     BYTE state[4][4];
 
     // Copy the input to the state.
@@ -1066,4 +1044,18 @@ void aes_decrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize)
     out[13] = state[1][3];
     out[14] = state[2][3];
     out[15] = state[3][3];
+}
+
+std::string & aes_remove_padding(std::string & str) {
+    // Trim spaces
+    str.erase(std::find_if(str.rbegin(), str.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), str.end());
+
+    // Remove internal directives (ASCII ints from 0 to 31)
+    auto iterator = std::find_if(str.rbegin(), str.rend(), [] (char key) {
+        return key > 31;
+    });
+
+    str.erase(iterator.base(), str.end());
+
+    return str;
 }

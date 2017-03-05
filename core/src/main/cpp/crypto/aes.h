@@ -4,6 +4,9 @@
 * Copyright:
 * Disclaimer: This code is presented "as is" without any guarantees.
 * Details:    Defines the API for the corresponding AES implementation.
+*
+* Edited by: Santiago Aguilera
+* Changes: Refactors | New CBC method | New padding method.
 *********************************************************************/
 
 #ifndef SECUREKEYS_AES_H
@@ -11,6 +14,7 @@
 
 /*************************** HEADER FILES ***************************/
 #include <stddef.h>
+#include <string>
 
 /****************************** MACROS ******************************/
 #define AES_BLOCK_SIZE 16               // AES operates on 16 bytes at a time
@@ -117,5 +121,7 @@ int aes_decrypt_ccm(const BYTE ciphertext[],             // IN  - Ciphertext, th
                     int *mac_auth,                       // OUT - TRUE if authentication succeeded, FALSE if it did not. NULL pointer will ignore the authentication.
                     const BYTE key[],                    // IN  - The AES key for decryption.
                     int keysize);                        // IN  - The length of the key in BITS. Valid values are 128, 192, 256.
+
+std::string & aes_remove_padding(std::string & str); // Removes padding from the decoded string
 
 #endif //SECUREKEYS_AES_H
