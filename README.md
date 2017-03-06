@@ -77,10 +77,22 @@ Will look like this:
 
 Currently the library supports transitively Proguard, so just by adding the aar you should be safe :)
 
+### Benchmarks
+
+Benchmark was ran on a Samsung Fame Lite (pretty old phone):
+ * Android 4.1.2
+ * CPU 1Ghz Single-Core ARM Cortex-A9
+ * 512MB RAM
+ * ISA ARMv7
+ 
+There were 5000 different keys encoded, and was tested 100 times the initializing of the library and the retrieval of a key (the 5000th)
+
+**Time to initialize the library** (ms): 209
+**Time to retrieve the 5000th key** (ms): 144
+
 ### Missing features:
 - [x] Change the encrypt/decrypt system, currently its base64, but we could start using aes or some more sophisticated crypto.
 - [ ] Let the consumer set their own AES key (this is tricky, key shouldnt be exposed to APK but should be visible for apt AND JNI)
-- [ ] Instead of decoding each of the keys to match the correct one, encrypt the desired one and make it O(1) the lookup.
 - [ ] Do tests
 - [ ] Set a CI for the repository
-- [ ] Post benchmarks
+- [x] Post benchmarks
