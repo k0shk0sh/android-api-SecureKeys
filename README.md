@@ -88,6 +88,7 @@ Benchmark was ran on a Samsung Fame Lite (pretty old phone):
 There were 5000 different keys encoded, and was tested 100 times the initializing of the library and the retrieval of a key (the 5000th)
 
 **Time to initialize the library** (ms): 209
+
 **Time to retrieve the 5000th key** (ms): 144
 
 ### Missing features:
