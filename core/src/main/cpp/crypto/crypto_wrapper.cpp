@@ -40,12 +40,8 @@ std::string & crypto_wrapper_decode(JNIEnv *env, std::string encoded_string) {
         src_len -= padding_len;
     }
 
-    // Create byte array from buffer
-    jbyteArray bytes = (env)->NewByteArray(src_len);
-    (env)->SetByteArrayRegion(bytes, 0, src_len, (jbyte*) buff);
-
     // Interpret it as a string
-    std::string result(reinterpret_cast<char const*>(buff), len);
+    std::string result(reinterpret_cast<char const*>(buff), src_len);
 
     // Release ashmem
     free(input);

@@ -44,7 +44,10 @@ JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit
         if (string != NULL) {
             (env)->ReleaseStringUTFChars(string, rawString);
         }
+        env->DeleteLocalRef(string);
     }
+
+    env->DeleteLocalRef(array);
 }
 
 JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString
@@ -54,11 +57,13 @@ JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString
     for(std::pair<std::string, std::string> const &pair : mapVals) {
         if (paramKey.compare(decode(env, pair.first)) == 0) {
             env->ReleaseStringUTFChars(key, rawString);
+            env->DeleteLocalRef(key);
             return (env)->NewStringUTF(decode(env, pair.second).c_str());
         }
     }
 
     env->ReleaseStringUTFChars(key, rawString);
+    env->DeleteLocalRef(key);
 
     return (env)->NewStringUTF(_default_response);
 }
