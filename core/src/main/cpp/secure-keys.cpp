@@ -14,8 +14,8 @@ std::map<std::string , std::string> mapVals;
 
 extern "C" {
     JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved);
-    JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString(JNIEnv *env, jclass instance, jstring key);
-    JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit(JNIEnv *env, jclass instance, jobjectArray array);
+    JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureEnvironment_nativeGetString(JNIEnv *env, jclass instance, jstring key);
+    JNIEXPORT void JNICALL Java_com_u_securekeys_SecureEnvironment_nativeInit(JNIEnv *env, jclass instance, jobjectArray array);
 };
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
@@ -27,7 +27,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
     return JNI_VERSION_1_6;
 }
 
-JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit
+JNIEXPORT void JNICALL Java_com_u_securekeys_SecureEnvironment_nativeInit
         (JNIEnv *env, jclass instance, jobjectArray array) {
     int stringCount = env->GetArrayLength(array);
 
@@ -50,7 +50,7 @@ JNIEXPORT void JNICALL Java_com_u_securekeys_SecureKeys_nativeInit
     env->DeleteLocalRef(array);
 }
 
-JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureKeys_nativeGetString
+JNIEXPORT jstring JNICALL Java_com_u_securekeys_SecureEnvironment_nativeGetString
         (JNIEnv *env, jclass instance, jstring key) {
     const char *rawString = env->GetStringUTFChars(key, 0);
     std::string paramKey(rawString);

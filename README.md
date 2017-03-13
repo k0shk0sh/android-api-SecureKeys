@@ -40,9 +40,9 @@ Possible places for annotating are:
 
 Thats all. Whenever you plan on using them simply call one of:
 ```Java
-SecureKeys.getString("client_secret");
-SecureKeys.getLong("crash_tracking_system_user_id");
-SecureKeys.getDouble("time_for_destroying_the_world");
+SecureEnvironment.getString("client_secret");
+SecureEnvironment.getLong("crash_tracking_system_user_id");
+SecureEnvironment.getDouble("time_for_destroying_the_world");
 ```
 
 ### Code generation

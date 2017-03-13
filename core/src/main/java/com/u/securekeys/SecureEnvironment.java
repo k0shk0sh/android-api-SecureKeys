@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  *
  * Created by saguilera on 3/3/17.
  */
-public final class SecureKeys {
+public final class SecureEnvironment {
 
     private static final long NAN_LONG = -1;
     private static final String NAN_STRING = "";
@@ -27,7 +27,7 @@ public final class SecureKeys {
         }
     }
 
-    private SecureKeys() throws IllegalAccessException {
+    private SecureEnvironment() throws IllegalAccessException {
         throw new IllegalAccessException("This object cant be instantiated");
     }
 
