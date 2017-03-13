@@ -7,7 +7,8 @@ machine:
   java:
     version: oraclejdk8
 
-cache_directories:
+dependencies:
+  cache_directories:
     - ~/android-ndk-r14
   pre:
     - if [[ ! -e ~/android-ndk-r14 ]]; then wget http://dl.google.com/android/repository/android-ndk-r14-linux-x86_64.zip && unzip -qq -d ~ android-ndk-r14-linux-x86_64.zip; fi
@@ -16,10 +17,10 @@ cache_directories:
     - if [ ! -d "/usr/local/android_sdk/extras/android/m2repository/com/android/support/support-core-utils/25.1.0" ]; then echo y | android update sdk --no-ui --all --filter "extra-android-m2repository"; fi
 
 test:
-    override:
-        - ./gradlew build --console=plain
-    post:
-        - if [ -d testapp/build/outputs ]; then cp -r testapp/build/outputs $CIRCLE_ARTIFACTS; fi
-        - if [ -d annotation/build/reports ]; then cp -r annotation/build/reports $CIRCLE_TEST_REPORTS; fi
-        - if [ -d core/build/reports ]; then cp -r core/build/reports $CIRCLE_TEST_REPORTS; fi
-        - if [ -d processor/build/reports ]; then cp -r processor/build/reports $CIRCLE_TEST_REPORTS; fi
+  override:
+    - ./gradlew build --console=plain
+  post:
+    - if [ -d testapp/build/outputs ]; then cp -r testapp/build/outputs $CIRCLE_ARTIFACTS; fi
+    - if [ -d annotation/build/reports ]; then cp -r annotation/build/reports $CIRCLE_TEST_REPORTS; fi
+    - if [ -d core/build/reports ]; then cp -r core/build/reports $CIRCLE_TEST_REPORTS; fi
+    - if [ -d processor/build/reports ]; then cp -r processor/build/reports $CIRCLE_TEST_REPORTS; fi
