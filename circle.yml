@@ -1,0 +1,22 @@
+machine:
+  environment:
+    PATH: $ANDROID_NDK:$PATH
+    GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+  java:
+    version: oraclejdk8
+
+dependencies:
+    cache_directories:
+        - ~/.android
+    override:
+        - bash ci/install_depenencies.sh
+        # Run dependencies so the gradle gets cached
+        - ./gradlew testapp:dependencies --console=plain
+
+test:
+    override:
+        - ./gradlew build --console=plain
+        - if [ -d testapp/build/outputs ]; then cp -r testapp/build/outputs $CIRCLE_ARTIFACTS; fi
+        - if [ -d annotation/build/reports ]; then cp -r annotation/build/reports $CIRCLE_TEST_REPORTS; fi
+        - if [ -d core/build/reports ]; then cp -r core/build/reports $CIRCLE_TEST_REPORTS; fi
+        - if [ -d processor/build/reports ]; then cp -r processor/build/reports $CIRCLE_TEST_REPORTS; fi
