@@ -9,7 +9,7 @@ dependencies:
     cache_directories:
         - ~/.android
     override:
-        - bash ci/install_depenencies.sh
+        - bash ci/install_dependencies.sh
         # Run dependencies so the gradle gets cached
         - ./gradlew testapp:dependencies --console=plain
 
