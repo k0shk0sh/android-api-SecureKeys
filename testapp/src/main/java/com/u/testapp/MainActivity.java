@@ -12,7 +12,9 @@ import junit.framework.Assert;
     @SecureKey(key = "a", value = "e"),
     @SecureKey(key = "b", value = "f"),
     @SecureKey(key = "c", value = "g"),
-    @SecureKey(key = "d", value = "h")
+    @SecureKey(key = "d", value = "h"),
+    @SecureKey(key = "long_from_BuildConfig", value = BuildConfig.TESTING_VALUE_1),
+    @SecureKey(key = "double_from_BuildConfig", value = BuildConfig.TESTING_VALUE_2)
 })
 public class MainActivity extends AppCompatActivity {
 
@@ -22,11 +24,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Assert.assertEquals(SecureEnvironment.getString("client-secret"), "aD98E2GEk23TReYds9Zs9zdSdDBi23EAsdq29fXkpsDwp0W+h");
-        Assert.assertEquals(SecureEnvironment.getString("a"), "e");
-        Assert.assertEquals(SecureEnvironment.getString("b"), "f");
-        Assert.assertEquals(SecureEnvironment.getString("c"), "g");
-        Assert.assertEquals(SecureEnvironment.getString("d"), "h");
+        Assert.assertEquals("aD98E2GEk23TReYds9Zs9zdSdDBi23EAsdq29fXkpsDwp0W+h", SecureEnvironment.getString("client-secret"));
+        Assert.assertEquals("e", SecureEnvironment.getString("a"));
+        Assert.assertEquals("f", SecureEnvironment.getString("b"));
+        Assert.assertEquals("g", SecureEnvironment.getString("c"));
+        Assert.assertEquals("h", SecureEnvironment.getString("d"));
+        Assert.assertEquals(Long.valueOf(BuildConfig.TESTING_VALUE_1), Long.valueOf(SecureEnvironment.getLong("long_from_BuildConfig")));
+        Assert.assertEquals(Double.valueOf(BuildConfig.TESTING_VALUE_2), SecureEnvironment.getDouble("double_from_BuildConfig"));
 
         ((TextView) findViewById(R.id.activity_main_key)).setText(SecureEnvironment.getString("client-secret"));
     }

@@ -17,6 +17,11 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Dont put here sensible data, the attacker can see it unencrypted in the BuildConfig file later!!
+            // If your app has Proguard (and you do remove the BuildConfig fields), then its no problem at all.
+            buildConfigField "String", "TESTING_VALUE_1", "\"5000\""
+            buildConfigField "String", "TESTING_VALUE_2", "\"3.1415\""
         }
         release {
             minifyEnabled true
