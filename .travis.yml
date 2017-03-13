@@ -51,6 +51,9 @@ android:
      - extra-android-m2repository
      - extra-android-support
 
+before_install:
+    - bash "ci/run_before_install.sh"
+
 script:
     - bash "ci/run_script.sh"
 

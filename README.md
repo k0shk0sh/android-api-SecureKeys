@@ -26,7 +26,7 @@ Annotate secure stuff wherever you like as:
 ```Java
 @SecureKeys({
     @SecureKey(key = "client_secret", value = "my_client_secret..."),
-    @SecureKey(key = "another_one_here", value "...")
+    @SecureKey(key = "another_one_here", value = "...")
 })
 class MyClass {
   
