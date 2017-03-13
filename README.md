@@ -1,6 +1,6 @@
 # SecureKeys
 
-[![Build Status](https://travis-ci.org/saantiaguilera/android-api-SecureKeys.svg?branch=master)](https://travis-ci.org/saantiaguilera/android-api-SecureKeys)
+[![CircleCI](https://circleci.com/gh/saantiaguilera/android-api-SecureKeys/tree/develop.svg?style=svg)](https://circleci.com/gh/saantiaguilera/android-api-SecureKeys/tree/develop)
 
 A tiny lib (Less than 10 methods) to store constants where attackers will have a harder time to find.
 
