@@ -1,5 +1,7 @@
 # SecureKeys
 
+[![Build Status](https://travis-ci.org/saantiaguilera/android-api-SecureKeys.svg?branch=master)](https://travis-ci.org/saantiaguilera/android-api-SecureKeys)
+
 A tiny lib (Less than 10 methods) to store constants where attackers will have a harder time to find.
 
 ### Description
@@ -22,10 +24,13 @@ This way the attackers cant know the encoding system (because its inside the ann
 
 Annotate secure stuff wherever you like as:
 ```Java
-@SecureKey(key = "client_secret", value = "my_client_secret...")
+@SecureKeys({
+    @SecureKey(key = "client_secret", value = "my_client_secret..."),
+    @SecureKey(key = "another_one_here", value "...")
+})
 class MyClass {
   
-  @SecureKey(key = "or_here", value = "00112233")
+  @SecureKey(key = "or_here_a_single_one", value = "...")
   public void myMethod() {}
   
 }
@@ -95,5 +100,5 @@ There were 5000 different keys encoded, and was tested 100 times the initializin
 - [x] Change the encrypt/decrypt system, currently its base64, but we could start using aes or some more sophisticated crypto.
 - [ ] Let the consumer set their own AES key (this is tricky, key shouldnt be exposed to APK but should be visible for apt AND JNI)
 - [ ] Do tests
-- [ ] Set a CI for the repository
+- [x] Set a CI for the repository
 - [x] Post benchmarks
