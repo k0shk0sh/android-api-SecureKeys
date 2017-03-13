@@ -16,7 +16,6 @@
                *
 *
 * Edited by: Santiago Aguilera
-* Changes: Refactors | New CBC method | New padding method
 *********************************************************************/
 
 /*************************** HEADER FILES ***************************/

@@ -6,7 +6,6 @@
 * Details:    Defines the API for the corresponding AES implementation.
 *
 * Edited by: Santiago Aguilera
-* Changes: Refactors | New CBC method | New padding method.
 *********************************************************************/
 
 #ifndef SECUREKEYS_AES_H

@@ -14,7 +14,7 @@ dependencies:
   pre:
     - bash "ci/install_ndk.sh" "$NDK_VERSION"
     - bash "ci/install_cmake.sh"
-    - BASH "CI/install_android.sh"
+    - bash "ci/install_android.sh"
 
 test:
   override:
