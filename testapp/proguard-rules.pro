@@ -18,3 +18,6 @@
 
 # So we can test the libs and not the testapp
 -keep class com.u.testapp.** { *; }
+
+-dontnote android.support.**
+-dontwarn android.support.**
