@@ -553,17 +553,3 @@ void aes_decrypt(const BYTE in[], BYTE out[], const WORD key[], int keysize) {
     out[14] = state[2][3];
     out[15] = state[3][3];
 }
-
-std::string & aes_remove_padding(std::string & str) {
-    // Trim spaces
-    str.erase(std::find_if(str.rbegin(), str.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), str.end());
-
-    // Remove internal directives (ASCII ints from 0 to 31)
-    auto iterator = std::find_if(str.rbegin(), str.rend(), [] (char key) {
-        return key > 31;
-    });
-
-    str.erase(iterator.base(), str.end());
-
-    return str;
-}

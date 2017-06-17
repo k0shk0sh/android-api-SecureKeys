@@ -17,6 +17,6 @@ static unsigned char CRYPTO_WRAPPER_AES_KEY[32] = { 0x60, 0x3d, 0xeb, 0x10, 0x15
                                      0x07, 0x3b, 0x61, 0x08, 0xd7, 0x2d, 0x98, 0x10, 0xa3, 0x09, 0x14, 0xdf,
                                      0xf4 };
 
-std::string & crypto_wrapper_decode(JNIEnv *env, std::string encoded_string);
+std::string crypto_wrapper_decode(JNIEnv *env, std::string encoded_string);
 
 #endif //SECUREKEYS_CRYPTO_WRAPPER_H

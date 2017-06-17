@@ -9,5 +9,5 @@ repositories {
 
 dependencies {
     compile project(path:':annotation')
-    compile group: 'com.squareup', name: 'javapoet', version: '1.8.0'
+    compile misc.javapoet
 }

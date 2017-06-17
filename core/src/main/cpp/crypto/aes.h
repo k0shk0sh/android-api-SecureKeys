@@ -46,9 +46,4 @@ int aes_decrypt_cbc(const BYTE in[],          // Plaintext
                     int keysize,              // Bit length of the key, 128, 192 or 256
                     const BYTE iv[]);         // IV, must be AES_BLOCK_SIZE bytes long
 
-///////////////////
-// AES - UTILS
-///////////////////
-std::string & aes_remove_padding(std::string & str); // Removes padding from the decoded string
-
 #endif //SECUREKEYS_AES_H

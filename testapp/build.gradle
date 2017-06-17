@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.1'
+    compile support.appcompat
 
     compile project(path:':core')
     apt project(path:':processor')
