@@ -18,10 +18,10 @@ dependencies:
 
 test:
   override:
-    - ./gradlew annotation:build
-    - ./gradlew core:assemble core:lint # Cant run tests in CI yet, need to find out why on IDE they pass and from terminal cant find the dylib/so files
-    - ./gradlew processor:build
-    - ./gradlew testapp:build
+    - ./gradlew annotation:build --console=plain
+    - ./gradlew core:assemble core:lint --console=plain# Cant run tests in CI yet, need to find out why on IDE they pass and from terminal cant find the dylib/so files
+    - ./gradlew processor:build --console=plain
+    - ./gradlew testapp:build --console=plain
   post:
     - if [ -d testapp/build/outputs ]; then cp -r testapp/build/outputs $CIRCLE_ARTIFACTS; fi
     - if [ -d annotation/build/reports ]; then cp -r annotation/build/reports $CIRCLE_TEST_REPORTS; fi
