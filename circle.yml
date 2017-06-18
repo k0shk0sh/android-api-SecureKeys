@@ -15,11 +15,6 @@ dependencies:
     - bash "ci/install_ndk.sh" "$NDK_VERSION"
     - bash "ci/install_cmake.sh"
     - bash "ci/install_android.sh"
-    # Install and prepare the jni files for testing
-    - mkdir build && cd build
-    - cmake ..
-    - make
-    - cd -
 
 test:
   override:
