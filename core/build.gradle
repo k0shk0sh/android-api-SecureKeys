@@ -89,7 +89,5 @@ dependencies {
     compile support.annotations
 
     testCompile testing.junit
-    testCompile testing.googleTruth
-    testCompile testing.googleTesting
     testAnnotationProcessor project(path:':processor')
 }

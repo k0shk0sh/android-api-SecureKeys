@@ -35,7 +35,7 @@ public class Encoder {
         }
     }
 
-    private byte[] aes(byte[] content) {
+    byte[] aes(byte[] content) {
         try {
             SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
 

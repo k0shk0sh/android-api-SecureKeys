@@ -11,7 +11,7 @@ ext {
     ]
 
     junitVersion = '4.4'
-    googleTesting = '0.8'
+    googleTesting = '0.11'
     googleTruth = '0.33'
     testing = [
         junit : "junit:junit:$junitVersion",

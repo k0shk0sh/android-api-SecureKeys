@@ -10,4 +10,9 @@ repositories {
 dependencies {
     compile project(path:':annotation')
     compile misc.javapoet
+
+    testCompile testing.junit
+    testCompile testing.googleTruth
+    testCompile testing.googleTesting
+    testCompile files(org.gradle.internal.jvm.Jvm.current().getToolsJar())
 }
