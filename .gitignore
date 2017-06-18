@@ -7,6 +7,8 @@ CMakeCache.txt
 .gradle
 /local.properties
 .idea/
+*.so
+*.dylib
 .DS_Store
 /build
 /captures
