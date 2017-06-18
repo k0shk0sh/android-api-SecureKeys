@@ -7,7 +7,7 @@ static inline bool is_decodable(unsigned char c) {
     return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-std::string & base64_decode(std::string &encoded_string) {
+std::string base64_decode(std::string &encoded_string) {
     int in_len = encoded_string.size();
     int i = 0;
     int j = 0;

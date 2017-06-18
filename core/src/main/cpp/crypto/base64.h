@@ -11,6 +11,6 @@ static const std::string base64_available_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz"
     "0123456789+/";
 
-std::string & base64_decode(std::string &encoded_string);
+std::string base64_decode(std::string &encoded_string);
 
 #endif //SECUREKEYS_BASE64_H

@@ -11,13 +11,17 @@ import java.lang.reflect.Method;
  */
 public final class SecureEnvironment {
 
+    private static final String ENV_LIBRARY_NAME = "secure-keys";
+    static final String ENV_PROCESSED_MAP_NAME = "com.u.securekeys.ProcessedMap";
+    static final String ENV_PROCESSED_MAP_METHOD = "retrieve";
+
     private static final long NAN_LONG = -1;
     private static final String NAN_STRING = "";
 
     private static boolean initialized;
 
     static {
-        System.loadLibrary("secure-keys");
+        System.loadLibrary(ENV_LIBRARY_NAME);
 
         try {
             tryNativeInit();
@@ -31,11 +35,10 @@ public final class SecureEnvironment {
         throw new IllegalAccessException("This object cant be instantiated");
     }
 
-    @SuppressWarnings("unchecked")
     @Keep
     private static void tryNativeInit() throws Exception {
-        Class clazz = Class.forName("com.u.securekeys.ProcessedMap");
-        Method method = clazz.getDeclaredMethod("retrieve");
+        Class<?> clazz = Class.forName(ENV_PROCESSED_MAP_NAME);
+        Method method = clazz.getDeclaredMethod(ENV_PROCESSED_MAP_METHOD);
         method.setAccessible(true);
         nativeInit((String[]) method.invoke(null));
     }

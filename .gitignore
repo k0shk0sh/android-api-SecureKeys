@@ -1,7 +1,14 @@
 *.iml
+Makefile
+CMakeFiles/
+**/CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
 .gradle
 /local.properties
 .idea/
+*.so
+*.dylib
 .DS_Store
 /build
 /captures

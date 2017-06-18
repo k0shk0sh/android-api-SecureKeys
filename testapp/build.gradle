@@ -3,7 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         applicationId "com.u.testapp"
@@ -37,7 +37,7 @@ android {
 }
 
 dependencies {
-    compile group: 'com.android.support', name: 'appcompat-v7', version: '25.1.1'
+    compile support.appcompat
 
     compile project(path:':core')
     apt project(path:':processor')

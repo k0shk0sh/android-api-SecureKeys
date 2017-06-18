@@ -1,0 +1,21 @@
+ext {
+    supportVersion = '25.4.0'
+    support = [
+        annotations : "com.android.support:support-annotations:$supportVersion",
+        appcompat : "com.android.support:appcompat-v7:$supportVersion"
+    ]
+
+    javapoetVersion = '1.8.0'
+    misc = [
+        javapoet : "com.squareup:javapoet:$javapoetVersion"
+    ]
+
+    junitVersion = '4.4'
+    googleTesting = '0.11'
+    googleTruth = '0.33'
+    testing = [
+        junit : "junit:junit:$junitVersion",
+        googleTesting : "com.google.testing.compile:compile-testing:$googleTesting",
+        googleTruth : "com.google.truth:truth:$googleTruth"
+    ]
+}

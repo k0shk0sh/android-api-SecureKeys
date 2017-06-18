@@ -3,9 +3,10 @@
 //
 #include "base64.h"
 #include "aes.h"
+#include <stdlib.h>
 #include "crypto_wrapper.h"
 
-std::string & crypto_wrapper_decode(JNIEnv *env, std::string encoded_string) {
+std::string crypto_wrapper_decode(JNIEnv *env, std::string encoded_string) {
     std::string base64_decode_string = base64_decode(encoded_string);
 
     // Prepare data for aes
@@ -47,6 +48,5 @@ std::string & crypto_wrapper_decode(JNIEnv *env, std::string encoded_string) {
     free(input);
     free(buff);
 
-    // Trim spaces / carriage returns / etc from string
-    return aes_remove_padding(result);
+    return result;
 }
