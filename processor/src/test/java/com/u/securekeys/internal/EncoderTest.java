@@ -33,7 +33,7 @@ public class EncoderTest {
     }
 
     @Test
-    public void test_EncodeBase64() {
+    public void test_FullCrypt() {
         // Test array of bytes to crypt
         String value = "test_message";
 
