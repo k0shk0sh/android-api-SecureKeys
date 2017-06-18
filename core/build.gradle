@@ -25,18 +25,20 @@ android {
 }
 
 /**
- * Since we cant add our path to the java.library.path (.so lookup places)
+ * Since we cant add our path to the java.library.path (.so/dylib lookup places)
  * because gradle will eventually overwrite them with the defaults, we add it
  * to one of those our lib and then delete it
  */
 task setupJNILibrary() {
     doLast {
-        def soFilePath = './build/core/src/main/cpp/libsecure-keys.so';
+        def extension = org.apache.tools.ant.taskdefs.condition.Os.isFamily(
+            org.apache.tools.ant.taskdefs.condition.Os.FAMILY_MAC) ? 'dylib' : 'so'
+        def soFilePath = "./build/core/src/main/cpp/libsecure-keys.${extension}";
         File inputFile = new File(soFilePath)
         if (inputFile.exists()) {
             def possiblePlaces = System.properties.'java.library.path'.tokenize(':')
             possiblePlaces.each { dest ->
-                File destFile = new File("${dest}/libsecure-keys.so")
+                File destFile = new File("${dest}/libsecure-keys.${extension}")
 
                 try {
                     if (destFile.createNewFile() || destFile.exists()) {
@@ -48,19 +50,24 @@ task setupJNILibrary() {
                 }
             }
         } else {
-            throw new GradleException(".so file not found. Please run from the root-project folder:\n" +
+            throw new GradleException(".${extension} file not found. Please run from the root-project folder:\n" +
                 "1. mkdir build && cd build\n" +
                 "2. cmake ..\n" +
-                "3. make")
+                "3. make\n" +
+                "If you have already done this. Then the classloader paths are all write protected, please copy this file on your own to one of this places.\n" +
+                "file: ./build/core/src/main/cpp/libsecure-keys.${extension}\n" +
+                "places: ${System.properties.'java.library.path'}")
         }
     }
 }
 
 task teardownJNILibrary() {
     doLast {
+        def extension = org.apache.tools.ant.taskdefs.condition.Os.isFamily(
+            org.apache.tools.ant.taskdefs.condition.Os.FAMILY_MAC) ? 'dylib' : 'so'
         def possiblePlaces = System.properties.'java.library.path'.tokenize(':')
         for (def place : possiblePlaces) {
-            File file = new File("${place}/libsecure-keys.so")
+            File file = new File("${place}/libsecure-keys.${extension}")
             if (file.exists()) {
                 file.delete()
             }
@@ -68,9 +75,12 @@ task teardownJNILibrary() {
     }
 }
 
-tasks.withType(Test) { task ->
-    task.dependsOn project.tasks.setupJNILibrary
-    project.tasks.teardownJNILibrary.shouldRunAfter task
+afterEvaluate {
+    android.buildTypes.all { buildType ->
+        def buildTypeTask = tasks["compile${buildType.name.capitalize()}UnitTestSources"]
+        buildTypeTask.dependsOn project.tasks.setupJNILibrary
+        project.tasks.teardownJNILibrary.shouldRunAfter buildTypeTask
+    }
 }
 
 dependencies {

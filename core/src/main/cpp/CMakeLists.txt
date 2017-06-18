@@ -17,9 +17,5 @@ add_library(secure-keys
 			crypto/base64.h
 			crypto/crypto_wrapper.h)
 
-if(APPLE)
-  set(CMAKE_SHARED_LIBRARY_SUFFIX ".so")
-endif(APPLE)
-
 set(CMAKE_CXX_FLAGS "-fPIC")
 set_target_properties(secure-keys PROPERTIES CMAKE_SHARED_LINKER_FLAGS "-fPIC")

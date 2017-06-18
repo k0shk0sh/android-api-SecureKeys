@@ -2,6 +2,7 @@ package com.u.securekeys;
 
 import com.u.securekeys.annotation.SecureKey;
 import com.u.securekeys.annotation.SecureKeys;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.junit.Assert;
@@ -21,7 +22,6 @@ public class SecureEnvironmentTest {
 
     @Before
     public void setUp() {
-        System.out.println(System.getProperty("java.library.path"));
         SecureEnvironment.getString("nothing");
     }
 
@@ -80,7 +80,7 @@ public class SecureEnvironmentTest {
      */
     @Test
     public void test_GetDouble() {
-        Assert.assertEquals("Values werent the same", 0.98765432123456789D, SecureEnvironment.getDouble("test_key_double"));
+        Assert.assertEquals("Values werent the same", 0.98765432123456789D, SecureEnvironment.getDouble("test_key_double"), 0.00000000000000001D);
     }
 
 }
