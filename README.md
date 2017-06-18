@@ -22,6 +22,8 @@ This way the attackers cant know the encoding system (because its inside the ann
 
 **I havent uploaded yet to bintray, so currently theres no way :poop:** -> Soon will be :)
 
+For the moment, I highly recommend you to add this project manually so you can also change for a custom initial_vector and aes_key.
+
 Annotate secure stuff wherever you like as:
 ```Java
 @SecureKeys({
@@ -96,9 +98,19 @@ There were 5000 different keys encoded, and was tested 100 times the initializin
 
 **Time to retrieve the 5000th key** (ms): 144
 
+### Contributing
+
+Fork and submit a PR!
+
+Modules:
+- annotation: Provides annotations that are used by the processor
+- core: The interaction of the user. Decrypts are done using C++, a java bridge is used for asking them
+- processor: Custom APT that handles the annotations and produces crypted key/values (that can be handled by the c++ lib)
+- testapp: Test application for testing all of the above
+
+Relevant notes for developing it:
+- JNI/Java bridge Tests are not supported by the platform so a "proxy" was created for giving it compatibility. Since this is not crucial for the project, it only works from the IDE, not from console (I should add all the classpaths dynamically before running the JUnit Starter. **Please ensure ALL the tests of the `:core` module pass from the Android Studio IDE**
+- JNI Tests are not supported out of the box, so there are no tests for it. A PR is welcome adding them (using cppunit or some tool ofc)
+
 ### Missing features:
-- [x] Change the encrypt/decrypt system, currently its base64, but we could start using aes or some more sophisticated crypto.
 - [ ] Let the consumer set their own AES key (this is tricky, key shouldnt be exposed to APK but should be visible for apt AND JNI)
-- [ ] Do tests
-- [x] Set a CI for the repository
-- [x] Post benchmarks

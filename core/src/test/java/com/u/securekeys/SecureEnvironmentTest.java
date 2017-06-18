@@ -2,7 +2,6 @@ package com.u.securekeys;
 
 import com.u.securekeys.annotation.SecureKey;
 import com.u.securekeys.annotation.SecureKeys;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.junit.Assert;
@@ -13,6 +12,11 @@ import static com.u.securekeys.SecureEnvironment.ENV_PROCESSED_MAP_METHOD;
 import static com.u.securekeys.SecureEnvironment.ENV_PROCESSED_MAP_NAME;
 import static org.junit.Assert.fail;
 
+/**
+ * This test suite can only be run for the moment from the IDE, since it adds all the necessary classpaths for using the
+ * java.library.path when loading a JNI library. From console its still impossible to test, so when coding
+ * please ensure to test the full suite from the IDE
+ */
 @SecureKeys({
     @SecureKey(key = "test_key_string", value = "A simple string"),
     @SecureKey(key = "test_key_long", value = "1234567890987654321"),
