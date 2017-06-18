@@ -19,7 +19,7 @@ dependencies:
 test:
   override:
     - ./gradlew annotation:build --console=plain
-    - ./gradlew core:assemble core:lint --console=plain# Cant run tests in CI yet, need to find out why on IDE they pass and from terminal cant find the dylib/so files
+    - ./gradlew core:assemble core:lint --console=plain # Cant run tests in CI yet, need to find out why on IDE they pass and from terminal cant find the dylib/so files
     - ./gradlew processor:build --console=plain
     - ./gradlew testapp:build --console=plain
   post:
